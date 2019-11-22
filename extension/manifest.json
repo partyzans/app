@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "Partyzans",
+  "version": "1.0",
+
+  "description": "",
+  "icons": {
+    "48": "icons/48.png",
+    "96": "icons/96.png"
+  },
+  "applications": {
+    "gecko": {
+      "strict_min_version": "56.0"
+    }
+  },
+
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "webRequest",
+    "webRequestBlocking",
+    "moz-extension://1cdf06f3-63e3-a040-b270-e086b614e1aa/",
+    "https://isletnet.com/",
+    "http://livejs.com/"
+  ],
+  "browser_action": {
+    "default_icon": "icons/48.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  }
+}
