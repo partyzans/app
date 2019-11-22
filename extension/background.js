@@ -10,12 +10,16 @@ function logURL(requestDetails) {
   console.log('URL: ' + requestDetails.url);
   if (requestDetails.requestBody.raw) {
     console.warn('body', requestDetails.requestBody);
-    var data = requestDetails.requestBody.raw;
-    var str = btoa(String.fromCharCode.apply(null, new Uint8Array(data)));
+    const data = requestDetails.requestBody.raw[0].bytes;
+    console.warn('data', data);
+    const json = String.fromCharCode.apply(null, new Uint8Array(data))
+    console.warn('json', json);
+    const base64s = JSON.parse(json).images_base64
+    console.warn('base64s', base64s);
+    const pngs = base64s.map((base64) => atob(base64))
+    console.warn('str', pngs);
 
-    console.warn('str', str);
-
-    sendPostReq(str);
+    sendPostReq(pngs);
   }
 }
 
