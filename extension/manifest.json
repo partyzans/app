@@ -19,9 +19,7 @@
     "tabs",
     "webRequest",
     "webRequestBlocking",
-    "moz-extension://1cdf06f3-63e3-a040-b270-e086b614e1aa/",
-    "https://isletnet.com/",
-    "http://livejs.com/"
+    "https://isletnet.com/"
   ],
   "browser_action": {
     "default_icon": "icons/48.png"
