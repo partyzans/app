@@ -15,7 +15,6 @@ browser.browserAction.onClicked.addListener(function() {
         doFlag = false;
         chrome.tabs.update(tabs[i].id, { active: true }); //focus it
         tabId = tabs[i].id;
-        onExecuted();
         break;
       }
     }
@@ -31,19 +30,6 @@ browser.browserAction.onClicked.addListener(function() {
 function onCreated(newTab) {
   // Use setTimeOut to give the loaded page some time to register the message listener
   tabId = newTab.id;
-  setTimeout(onCreatedInner, 500);
-  function onCreatedInner() {
-    browser.tabs
-      .executeScript(tabId, {
-        file: 'inject.js',
-        allFrames: false,
-      })
-      .then(onExecuted, onError);
-  }
-}
-
-function onExecuted() {
-  chrome.tabs.sendMessage(tabId, { message: 'test' });
 }
 
 function onError(err) {
