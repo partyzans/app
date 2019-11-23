@@ -1,12 +1,13 @@
 {
   "manifest_version": 2,
-  "name": "Partyzans",
+  "name": "IsletNet+",
   "version": "1.0",
 
   "description": "",
   "icons": {
-    "48": "icons/48.png",
-    "96": "icons/96.png"
+    "96": "favicon/favicon-96x96.png",
+    "32": "favicon/favicon-32x32.png",
+    "16": "favicon/favicon-16x16.png"
   },
   "applications": {
     "gecko": {
@@ -22,7 +23,7 @@
     "https://isletnet.com/"
   ],
   "browser_action": {
-    "default_icon": "icons/48.png"
+    "default_icon": "favicon/android-icon-192x192.png"
   },
   "background": {
     "scripts": ["background.js"]
