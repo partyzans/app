@@ -4,6 +4,7 @@ const GETPOINT = 'http://localhost:8000/results/';
 const URL = 'isletnet.com';
 const pattern = 'https://isletnet.com/api/*';
 let tabId = 0;
+let dataSubmited = false;
 
 browser.browserAction.onClicked.addListener(function() {
   chrome.tabs.query({}, function(tabs) {
@@ -65,15 +66,18 @@ function handleError(error) {
 }
 
 function logResponse(responseDetails) {
-  if (responseDetails.url === 'https://isletnet.com/api/isolation/submit') {
+  if (
+    responseDetails.url === 'https://isletnet.com/api/isolation/submit' &&
+    !dataSubmited
+  ) {
+    dataSubmited = true;
     sendMessage('SUBMIT', {});
     setTimeout(() => {
       console.warn('sending ...');
       sendMessage('RESULTS', {
         results: [
-          { result: '1.1123123', group: 'passed' },
-          { result: '1.412312', group: 'failed' },
-          { result: '1.22222', group: 'revalidate' },
+          { name: 'green.png', result: '1.1123123', group: 'passed' },
+          { name: 'firefox.png', result: '1.412312', group: 'failed' },
         ],
       });
     }, 4400);
@@ -85,18 +89,19 @@ function logURL(requestDetails) {
   // console.log('REQ: ' + JSON.stringify(requestDetails));
 
   if (requestDetails.url === 'https://isletnet.com/api/images/upload') {
+    dataSubmited = false;
     if (requestDetails.requestBody.raw) {
       const data = requestDetails.requestBody.raw[0].bytes;
       // console.warn('data', data);
-      const enc = new TextDecoder('utf-8')
-      const json = enc.decode(data)
+      const enc = new TextDecoder('utf-8');
+      const json = enc.decode(data);
       // console.warn('json', json);
       const base64s = JSON.parse(json).images_base64;
       // console.warn('base64s', base64s);
       // const pngs = base64s.map(base64 => atob(base64));
-      base64s.forEach((base64) => {
-        sendPostReq(base64)
-      })
+      base64s.forEach(base64 => {
+        sendPostReq(base64);
+      });
     }
   }
 }

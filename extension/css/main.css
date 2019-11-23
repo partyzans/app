@@ -18,4 +18,10 @@ h1.hero-text-title:after {
   border-bottom: 3px solid #e2001a;
   padding-right: 10px;
   min-width: 60px;
+  color: black;
+  font-weight: bold;
+  background-image: url(https://raw.githubusercontent.com/partyzans/app/master/extension/favicon/android-icon-16x16.png);
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
 }
