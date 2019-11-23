@@ -5,8 +5,6 @@ const pattern = 'https://isletnet.com/api/*';
 let tabId = 0;
 
 browser.browserAction.onClicked.addListener(function() {
-  //browser.tabs.create({ url: 'https://isletnet.com/' }, onCreated);
-
   chrome.tabs.query({}, function(tabs) {
     var doFlag = true;
     for (var i = tabs.length - 1; i >= 0; i--) {
@@ -66,19 +64,27 @@ function handleError(error) {
   console.log(`Background error:: ${error}`);
 }
 
+function logResponse(responseDetails) {
+  console.log(responseDetails.url);
+  console.log(responseDetails.statusCode);
+}
+
 function logURL(requestDetails) {
-  sendMessage('FILE_LOAD', 'tempFileName');
-  console.log('URL req: ' + requestDetails.url);
-  if (requestDetails.requestBody.raw) {
-    const data = requestDetails.requestBody.raw[0].bytes;
-    // console.warn('data', data);
-    const json = String.fromCharCode.apply(null, new Uint8Array(data));
-    // console.warn('json', json);
-    const base64s = JSON.parse(json).images_base64;
-    // console.warn('base64s', base64s);
-    const pngs = base64s.map(base64 => atob(base64));
-    // console.warn('str', pngs);
-    sendPostReq(pngs);
+  // sendMessage('FILE_LOAD', 'tempFileName');
+  // console.log('REQ: ' + JSON.stringify(requestDetails));
+
+  if (requestDetails.url === 'https://isletnet.com/api/images/upload') {
+    if (requestDetails.requestBody.raw) {
+      const data = requestDetails.requestBody.raw[0].bytes;
+      // console.warn('data', data);
+      const json = String.fromCharCode.apply(null, new Uint8Array(data));
+      // console.warn('json', json);
+      const base64s = JSON.parse(json).images_base64;
+      // console.warn('base64s', base64s);
+      const pngs = base64s.map(base64 => atob(base64));
+      // console.warn('str', pngs);
+      sendPostReq(pngs);
+    }
   }
 }
 
@@ -107,3 +113,7 @@ browser.webRequest.onBeforeRequest.addListener(
   },
   ['requestBody']
 );
+
+browser.webRequest.onCompleted.addListener(logResponse, {
+  urls: [pattern],
+});
