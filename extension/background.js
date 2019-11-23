@@ -50,11 +50,10 @@ function handleMessage(request, sender, sendResponse) {
 }
 
 function sendMessage(type, content) {
-  let sending = chrome.tabs.sendMessage(tabId, {
+  chrome.tabs.sendMessage(tabId, {
     type: type,
     content: content,
   });
-  sending.then(handleResponse, handleError);
 }
 
 function handleResponse(message) {
@@ -66,8 +65,19 @@ function handleError(error) {
 }
 
 function logResponse(responseDetails) {
-  console.log(responseDetails.url);
-  console.log(responseDetails.statusCode);
+  if (responseDetails.url === 'https://isletnet.com/api/isolation/submit') {
+    sendMessage('SUBMIT', {});
+    setTimeout(() => {
+      console.warn('sending ...');
+      sendMessage('RESULTS', {
+        results: [
+          { result: '1.1123123', group: 'passed' },
+          { result: '1.412312', group: 'failed' },
+          { result: '1.22222', group: 'revalidate' },
+        ],
+      });
+    }, 4400);
+  }
 }
 
 function logURL(requestDetails) {

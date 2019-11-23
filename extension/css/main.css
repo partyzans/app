@@ -10,3 +10,12 @@ h1.hero-text-title:after {
   font-weight: bold;
   right: 35;
 }
+
+.results-table td.plus {
+  text-align: right;
+  font-weight: 300;
+  font-size: 14px;
+  border-bottom: 3px solid #e2001a;
+  padding-right: 10px;
+  min-width: 60px;
+}
