@@ -1,6 +1,6 @@
 console.warn('hello!');
 const ENDPOINT = 'http://localhost:8000/upload/';
-const GETPOINT = 'http://localhost:8000/results/';
+const GETPOINT = 'http://localhost:8000/data/';
 const URL = 'isletnet.com';
 const pattern = 'https://isletnet.com/api/*';
 let tabId = 0;
@@ -72,15 +72,7 @@ function logResponse(responseDetails) {
   ) {
     dataSubmited = true;
     sendMessage('SUBMIT', {});
-    setTimeout(() => {
-      console.warn('sending ...');
-      sendMessage('RESULTS', {
-        results: [
-          { name: 'green.png', result: '1.1123123', group: 'passed' },
-          { name: 'firefox.png', result: '1.412312', group: 'failed' },
-        ],
-      });
-    }, 4400);
+    getResults();
   }
 }
 
@@ -143,6 +135,7 @@ function getResults() {
       let jsonResponse = req.response;
       sendMessage('RESULTS', jsonResponse);
     } else {
+      console.error('GET ERROR', req.status);
       setTimeout(() => {
         getResults();
       }, 1500);

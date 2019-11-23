@@ -17,6 +17,7 @@ def writeFile(data):
     f.write(binary_format)
     f.close()
 
+
 @hug.startup()
 def add_data(api):
     """Adds initial data to the api on startup"""
@@ -37,9 +38,10 @@ def main(request, body, response, debug=True):
     print(request)
     response.status = HTTP_200
 
+
 @hug.get('/data')
 def data(request, body, response, debug=True):
-    response.status = HTTP_400
+    response.status = HTTP_200
 
     fake_data = [
         {
