@@ -21,21 +21,18 @@ function paintResults(res) {
   if (typeof table === 'undefined' || table == null) {
     setTimeout(results => paintResults, 2000);
     return;
-  }
-  // set headline
-  let row = table.rows[0];
-  let x = row.insertCell(-1);
-  x.classList.add('plus');
-  x.innerHTML = 'Probability';
+  } else {
+    // set headline
+    let row = table.rows[0];
+    let x = row.insertCell(-1);
+    x.classList.add('plus');
+    x.innerHTML = 'Probability';
+    let tempResults = results;
 
-  Object.keys(table.rows).forEach(index => {
-    console.warn('ROW ', index);
-    if (index != 0) {
-      let row = table.rows[index];
-      let x = row.insertCell(-1);
-      x.innerHTML = results[index].result;
-    }
-  });
+    results.forEach(result => {
+      console.warn(result);
+    });
+  }
 }
 
 function msgHandler(request, sender, sendResponse) {
