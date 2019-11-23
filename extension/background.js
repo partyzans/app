@@ -1,23 +1,22 @@
 console.warn('hello!');
-var ENDPOINT = 'http://localhost:8000/upload/';
-var pattern = 'https://isletnet.com/api/*';
+const ENDPOINT = 'http://localhost:8000/upload/';
+const pattern = 'https://isletnet.com/api/*';
 
 browser.browserAction.onClicked.addListener(function() {
   chrome.tabs.create({ url: 'index.html' });
 });
 
 function logURL(requestDetails) {
-  console.log('URL: ' + requestDetails.url);
+  console.log('URL req: ' + requestDetails.url);
   if (requestDetails.requestBody.raw) {
-    console.warn('body', requestDetails.requestBody);
     const data = requestDetails.requestBody.raw[0].bytes;
-    console.warn('data', data);
-    const json = String.fromCharCode.apply(null, new Uint8Array(data))
-    console.warn('json', json);
-    const base64s = JSON.parse(json).images_base64
-    console.warn('base64s', base64s);
-    const pngs = base64s.map((base64) => atob(base64))
-    console.warn('str', pngs);
+    // console.warn('data', data);
+    const json = String.fromCharCode.apply(null, new Uint8Array(data));
+    // console.warn('json', json);
+    const base64s = JSON.parse(json).images_base64;
+    // console.warn('base64s', base64s);
+    const pngs = base64s.map(base64 => atob(base64));
+    // console.warn('str', pngs);
 
     sendPostReq(pngs);
   }
