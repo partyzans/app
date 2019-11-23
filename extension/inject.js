@@ -16,7 +16,10 @@ function sendMessage(e) {
 }
 
 function msgHandler(request, sender, sendResponse) {
-  console.warn(request.message);
+  console.warn(request);
+  if (request.type === 'FILE_LOAD') {
+    sendResponse('file loaded');
+  }
   sendResponse('ack');
   return true;
 }

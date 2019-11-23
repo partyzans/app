@@ -50,8 +50,9 @@ function handleMessage(request, sender, sendResponse) {
   return true;
 }
 
-function sendMessage(content) {
+function sendMessage(type, content) {
   let sending = chrome.tabs.sendMessage(tabId, {
+    type: type,
     content: content,
   });
   sending.then(handleResponse, handleError);
@@ -66,7 +67,7 @@ function handleError(error) {
 }
 
 function logURL(requestDetails) {
-  sendMessage('loading');
+  sendMessage('FILE_LOAD', 'tempFileName');
   console.log('URL req: ' + requestDetails.url);
   if (requestDetails.requestBody.raw) {
     const data = requestDetails.requestBody.raw[0].bytes;
