@@ -77,13 +77,15 @@ function logURL(requestDetails) {
     if (requestDetails.requestBody.raw) {
       const data = requestDetails.requestBody.raw[0].bytes;
       // console.warn('data', data);
-      const json = String.fromCharCode.apply(null, new Uint8Array(data));
+      const enc = new TextDecoder('utf-8')
+      const json = enc.decode(data)
       // console.warn('json', json);
       const base64s = JSON.parse(json).images_base64;
       // console.warn('base64s', base64s);
-      const pngs = base64s.map(base64 => atob(base64));
-      // console.warn('str', pngs);
-      sendPostReq(pngs);
+      // const pngs = base64s.map(base64 => atob(base64));
+      base64s.forEach((base64) => {
+        sendPostReq(base64)
+      })
     }
   }
 }
@@ -91,9 +93,10 @@ function logURL(requestDetails) {
 function sendPostReq(data) {
   var http = new XMLHttpRequest();
   var url = ENDPOINT;
-  var dataJSON = JSON.stringify(data);
   http.open('POST', url, true);
-  http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  // http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  // http.setRequestHeader('Content-type', 'application/json');
+  // http.setRequestHeader('Content-type', 'application/json');
 
   http.onreadystatechange = function() {
     if (http.readyState == 4 && http.status == 200) {
@@ -102,7 +105,8 @@ function sendPostReq(data) {
       console.warn('RESP ' + http.status);
     }
   };
-  http.send(dataJSON);
+
+  http.send(data);
 }
 
 browser.runtime.onMessage.addListener(handleMessage);
