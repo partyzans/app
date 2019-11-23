@@ -36,3 +36,21 @@ def main(request, body, response, debug=True):
         response.status = HTTP_400
     print(request)
     response.status = HTTP_200
+
+@hug.get('/data')
+def data(request, body, response, debug=True):
+    response.status = HTTP_400
+
+    fake_data = [
+        {
+            'id': 1,
+            'certainty': 123,
+            'img': 'img',
+        },
+        {
+            'id': 2,
+            'certainty': 13,
+            'img': 'img',
+        }
+    ]
+    return json.dumps(fake_data)
