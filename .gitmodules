@@ -1,0 +1,3 @@
+[submodule "backend/data_playground"]
+	path = backend/data_playground
+	url = git@github.com:partyzans/data_playground.git
