@@ -44,11 +44,13 @@ def data(request, body, response, debug=True):
     fake_data = [
         {
             'id': 1,
+            'name': 'iz181207d0_C1V1_2x1000x',
             'certainty': 123,
             'img': 'img',
         },
         {
             'id': 2,
+            'name': 'iz181207d0_C1V1_2x1000x',
             'certainty': 13,
             'img': 'img',
         }
