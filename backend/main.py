@@ -1,4 +1,7 @@
 import hug
+import json
+import base64
+from random import random
 from falcon import HTTP_400, HTTP_200
 
 from hug.middleware import CORSMiddleware
@@ -7,6 +10,12 @@ import io
 api = hug.API(__name__)
 api.http.add_middleware(CORSMiddleware(api))
 
+
+def writeFile(data):
+    f = open('files/' + str(random()) + '.png', 'w+b')
+    binary_format = bytearray(data)
+    f.write(binary_format)
+    f.close()
 
 @hug.startup()
 def add_data(api):
@@ -17,7 +26,12 @@ def add_data(api):
 @hug.post('/upload')
 def main(request, body, response, debug=True):
     print("Bwah", response)
-    print(body)
+    print(type(body))
+    print(len(body))
+
+    decoded = base64.b64decode(body)
+    writeFile(decoded)
+
     if not body:
         response.status = HTTP_400
     print(request)
