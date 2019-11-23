@@ -108,9 +108,8 @@ function sendPostReq(data) {
 
   http.onreadystatechange = function() {
     if (http.readyState == 4 && http.status == 200) {
-      console.error(http.responseText);
     } else {
-      console.warn('RESP ' + http.status);
+      console.error('Post request error ' + http.status);
     }
   };
 
@@ -133,7 +132,7 @@ function getResults() {
   req.onload = function() {
     if (req.status == 200) {
       let jsonResponse = req.response;
-      sendMessage('RESULTS', jsonResponse);
+      sendMessage('RESULTS', JSON.parse(jsonResponse));
     } else {
       console.error('GET ERROR', req.status);
       setTimeout(() => {
