@@ -1,6 +1,6 @@
 console.warn('hello!');
 const ENDPOINT = 'http://localhost:8000/upload/';
-const GETPOINT = 'http://localhost:8000/results/';
+const GETPOINT = 'http://localhost:8000/data/';
 const URL = 'isletnet.com';
 const pattern = 'https://isletnet.com/api/*';
 let tabId = 0;
@@ -72,15 +72,7 @@ function logResponse(responseDetails) {
   ) {
     dataSubmited = true;
     sendMessage('SUBMIT', {});
-    setTimeout(() => {
-      console.warn('sending ...');
-      sendMessage('RESULTS', {
-        results: [
-          { name: 'green.png', result: '1.1123123', group: 'passed' },
-          { name: 'firefox.png', result: '1.412312', group: 'failed' },
-        ],
-      });
-    }, 4400);
+    getResults();
   }
 }
 
@@ -116,9 +108,8 @@ function sendPostReq(data) {
 
   http.onreadystatechange = function() {
     if (http.readyState == 4 && http.status == 200) {
-      console.error(http.responseText);
     } else {
-      console.warn('RESP ' + http.status);
+      console.error('Post request error ' + http.status);
     }
   };
 
@@ -141,8 +132,9 @@ function getResults() {
   req.onload = function() {
     if (req.status == 200) {
       let jsonResponse = req.response;
-      sendMessage('RESULTS', jsonResponse);
+      sendMessage('RESULTS', JSON.parse(jsonResponse));
     } else {
+      console.error('GET ERROR', req.status);
       setTimeout(() => {
         getResults();
       }, 1500);
