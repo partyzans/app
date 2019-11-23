@@ -1,5 +1,6 @@
 console.warn('hello!');
 const ENDPOINT = 'http://localhost:8000/upload/';
+const GETPOINT = 'http://localhost:8000/results/';
 const URL = 'isletnet.com';
 const pattern = 'https://isletnet.com/api/*';
 let tabId = 0;
@@ -117,6 +118,23 @@ browser.webRequest.onBeforeRequest.addListener(
   },
   ['requestBody']
 );
+
+function getResults() {
+  var req = new XMLHttpRequest();
+  req.responseType = 'json';
+  req.open('GET', GETPOINT, true);
+  req.onload = function() {
+    if (req.status == 200) {
+      let jsonResponse = req.response;
+      sendMessage('RESULTS', jsonResponse);
+    } else {
+      setTimeout(() => {
+        getResults();
+      }, 1500);
+    }
+  };
+  req.send(null);
+}
 
 browser.webRequest.onCompleted.addListener(logResponse, {
   urls: [pattern],
