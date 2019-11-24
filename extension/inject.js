@@ -40,7 +40,14 @@ function paintResults(res) {
           if (table.rows[index2].cells.length < 6) {
             let row = table.rows[index2];
             let x = row.insertCell(-1);
-            x.innerHTML = result.certainty;
+            x.classList.add(getState(result));
+            // count
+            table.rows[index2].cells[1].classList.add(result.countdecision);
+            // ellipsis - volume
+            table.rows[index2].cells[2].classList.add(result.volumedecision);
+            table.rows[index2].cells[3].classList.add(result.volumedecision);
+            // purity
+            table.rows[index2].cells[4].classList.add(result.puritydecision);
           }
         }
       });
@@ -49,6 +56,8 @@ function paintResults(res) {
       const clone = JSON.parse(JSON.stringify(tempResults));
       console.warn('Repeat, not end yet', clone);
       setTimeout(() => paintResults(clone), 500);
+    } else {
+      NProgress.done();
     }
   }
 }
@@ -64,10 +73,19 @@ function msgHandler(request, sender, sendResponse) {
   if (request.type === 'RESULTS') {
     alreadyRun = false;
     paintResults(request.content);
-    NProgress.done();
   }
   sendResponse('ack');
   return true;
+}
+
+function getState(res) {
+  let states = [];
+  states.push(res.countdecision);
+  states.push(res.volumedecision);
+  states.push(res.puritydecision);
+  if (states.indexOf('critical') > -1) return 'wrong';
+  if (states.indexOf('check') > -1) return 'medium';
+  return 'super';
 }
 
 function afterWindowLoaded() {

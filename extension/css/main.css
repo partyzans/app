@@ -23,5 +23,56 @@ h1.hero-text-title:after {
   background-image: url(https://raw.githubusercontent.com/partyzans/app/master/extension/favicon/android-icon-16x16.png);
   background-size: 16px 16px;
   background-repeat: no-repeat;
-  background-position: 10px center;
+  background-position: 5px center;
+}
+
+.results-table td.ok {
+  background: rgba(0, 128, 0, 0.3);
+}
+.results-table td.check {
+  background: rgba(255, 165, 0, 0.3);
+}
+.results-table td.critical {
+  background: rgba(255, 0, 0, 0.3);
+}
+
+.results-table tr.active td,
+.results-table tr.active td i,
+.results-table tr.included i {
+  font-weight: bold;
+}
+
+.results-table td {
+  color: black;
+}
+
+.results-table td.wrong {
+  position: relative;
+  display: block;
+}
+.results-table td.wrong:after {
+  content: '🚫';
+  position: absolute;
+  left: 50%;
+  right: 50%;
+}
+.results-table td.medium {
+  position: relative;
+  display: block;
+}
+.results-table td.medium:after {
+  content: '❔';
+  position: absolute;
+  left: 50%;
+  right: 50%;
+}
+.results-table td.super {
+  position: relative;
+  display: block;
+}
+.results-table td.super:after {
+  content: '✅';
+  position: absolute;
+  left: 50%;
+  right: 50%;
 }
