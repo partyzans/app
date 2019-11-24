@@ -1,6 +1,6 @@
 console.warn('hello!');
 const ENDPOINT = 'http://localhost:8000/upload/';
-const GETPOINT = 'http://localhost:8000/data/';
+const GETPOINT = 'http://localhost:8000/poll/';
 const URL = 'isletnet.com';
 const pattern = 'https://isletnet.com/api/*';
 let tabId = 0;
