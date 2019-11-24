@@ -4,6 +4,7 @@ const GETPOINT = 'http://localhost:8000/data/';
 const URL = 'isletnet.com';
 const pattern = 'https://isletnet.com/api/*';
 let tabId = 0;
+let counter = 0;
 let dataSubmited = false;
 
 browser.browserAction.onClicked.addListener(function() {
@@ -43,10 +44,7 @@ function url_domain(data) {
 }
 
 function handleMessage(request, sender, sendResponse) {
-  console.log(`content script sent a message: ${request.content}`);
-  setTimeout(() => {
-    sendResponse({ response: 'async response from background script' });
-  }, 1000);
+  if (request.content === 'RESET_COUNTER') counter = 0;
   return true;
 }
 
@@ -94,6 +92,7 @@ function logURL(requestDetails) {
       base64s.forEach(base64 => {
         sendPostReq(base64);
       });
+      sendMessage('COUNT_NAMES', {});
     }
   }
 }
@@ -101,7 +100,7 @@ function logURL(requestDetails) {
 function sendPostReq(data) {
   var http = new XMLHttpRequest();
   var url = ENDPOINT;
-  http.open('POST', url, true);
+  http.open('POST', url + counter, true);
   // http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   // http.setRequestHeader('Content-type', 'application/json');
   // http.setRequestHeader('Content-type', 'application/json');
@@ -112,8 +111,8 @@ function sendPostReq(data) {
       console.error('Post request error ' + http.status);
     }
   };
-
   http.send(data);
+  counter++;
 }
 
 browser.runtime.onMessage.addListener(handleMessage);

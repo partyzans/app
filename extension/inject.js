@@ -1,5 +1,7 @@
 console.warn('INJECTED!');
 let alreadyRun = false;
+let tempNames = [];
+sendMessage('RESET_COUNTER');
 
 function handleResponse(message) {
   console.log(`Response: ${message.response}`);
@@ -9,11 +11,10 @@ function handleError(error) {
   console.error(`Error: ${error}`);
 }
 
-function sendMessage(e) {
-  var sending = browser.runtime.sendMessage({
-    content: 'message from the content script',
+function sendMessage(data) {
+  browser.runtime.sendMessage({
+    content: data,
   });
-  sending.then(handleResponse, handleError);
 }
 
 function paintResults(res) {
@@ -35,7 +36,7 @@ function paintResults(res) {
     results.forEach((result, index1) => {
       Object.keys(table.rows).forEach(index2 => {
         let ent = table.rows[index2].cells[0].textContent;
-        if (ent === result.name) {
+        if (ent === tempNames[index1]) {
           tempResults.splice(index1, 1);
           if (table.rows[index2].cells.length < 6) {
             let row = table.rows[index2];
@@ -64,18 +65,32 @@ function paintResults(res) {
 
 function msgHandler(request, sender, sendResponse) {
   console.warn(request);
-  if (request.type === 'FILE_LOAD') {
-    sendResponse('file loaded');
-  }
-  if (request.type === 'SUBMIT') {
-    NProgress.start();
-  }
-  if (request.type === 'RESULTS') {
-    alreadyRun = false;
-    paintResults(request.content);
+  switch (request.type) {
+    case 'FILE_LOAD':
+      sendResponse('file loaded');
+      break;
+    case 'SUBMIT':
+      NProgress.start();
+      break;
+    case 'RESULTS':
+      alreadyRun = false;
+      paintResults(request.content);
+      break;
+    case 'COUNT_NAMES':
+      countNames();
+      break;
   }
   sendResponse('ack');
   return true;
+}
+
+function countNames() {
+  tempNames = [];
+  let wrapper = document.getElementsByClassName('uploaded-images-list')[0];
+  let allChilds = wrapper.getElementsByClassName('truncate-wrapper');
+  for (let child of allChilds) {
+    tempNames.push(child.innerText);
+  }
 }
 
 function getState(res) {
